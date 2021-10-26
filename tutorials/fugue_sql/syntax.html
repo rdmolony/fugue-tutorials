@@ -44,9 +44,9 @@
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
+        const thebe_selector = ".thebe,.cell"
+        const thebe_selector_input = "pre,.cell_input div.highlight"
+        const thebe_selector_output = ".output,.cell_output"
     </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -424,6 +424,24 @@
 
             <!-- Source interaction buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/fugue-project/tutorials"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/fugue-project/tutorials/issues/new?title=Issue%20on%20page%20%2Ftutorials/fugue_sql/syntax.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/fugue-project/tutorials/edit/master/tutorials/fugue_sql/syntax.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
             <!-- Full screen (wrap in <a> to have style consistency -->
 
 <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
@@ -446,6 +464,9 @@
         
         
         
+        <button type="button" class="btn btn-secondary topbarbtn"
+            onclick="initThebeSBT()" title="Launch Thebe" data-toggle="tooltip" data-placement="left"><i
+                class="fas fa-play"></i><span style="margin-left: .4em;">Live Code</span></button>
         
     </div>
 </div>
@@ -536,39 +557,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/javascript">
-require(["codemirror/lib/codemirror"]);
-function set(str) {
-    var obj = {}, words = str.split(" ");
-    for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
-    return obj;
-  }
-var fugue_keywords = "fill hash rand even presort persist broadcast params process output outtransform rowcount concurrency prepartition zip print title save append parquet csv json single checkpoint weak strong deterministic yield connect sample seed take sub callback dataframe file";
-CodeMirror.defineMIME("text/x-fsql", {
-    name: "sql",
-    keywords: set(fugue_keywords + " add after all alter analyze and anti archive array as asc at between bucket buckets by cache cascade case cast change clear cluster clustered codegen collection column columns comment commit compact compactions compute concatenate cost create cross cube current current_date current_timestamp database databases data dbproperties defined delete delimited deny desc describe dfs directories distinct distribute drop else end escaped except exchange exists explain export extended external false fields fileformat first following for format formatted from full function functions global grant group grouping having if ignore import in index indexes inner inpath inputformat insert intersect interval into is items join keys last lateral lazy left like limit lines list load local location lock locks logical macro map minus msck natural no not null nulls of on optimize option options or order out outer outputformat over overwrite partition partitioned partitions percent preceding principals purge range recordreader recordwriter recover reduce refresh regexp rename repair replace reset restrict revoke right rlike role roles rollback rollup row rows schema schemas select semi separated serde serdeproperties set sets show skewed sort sorted start statistics stored stratify struct table tables tablesample tblproperties temp temporary terminated then to touch transaction transactions transform true truncate unarchive unbounded uncache union unlock unset use using values view when where window with"),
-    builtin: set("date datetime tinyint smallint int bigint boolean float double string binary timestamp decimal array map struct uniontype delimited serde sequencefile textfile rcfile inputformat outputformat"),
-    atoms: set("false true null"),
-    operatorChars: /^[*\/+\-%<>!=~&|^]/,
-    dateSQL: set("time"),
-    support: set("ODBCdotTable doubleQuote zerolessFloat")
-  });
-
-CodeMirror.modeInfo.push( {
-            name: "Fugue SQL",
-            mime: "text/x-fsql",
-            mode: "sql"
-          } );
-
-require(['notebook/js/codecell'], function(codecell) {
-    codecell.CodeCell.options_default.highlight_modes['magic_text/x-fsql'] = {'reg':[/%%fsql/]} ;
-    Jupyter.notebook.events.on('kernel_ready.Kernel', function(){
-    Jupyter.notebook.get_cells().map(function(cell){
-        if (cell.cell_type == 'code'){ cell.auto_highlight(); } }) ;
-    });
-  });
-</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -687,11 +675,11 @@ PRINT
 </div></div><div class="output text_html"><small>schema: id:str,date:str,value:double</small></div></div>
 </div>
 <p>Note that the Pandas DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> was accessed inside the SQL expression. DataFrames defined in Python cells are automatically accessible by SQL cells. Other variables need to be passed in through <a class="reference internal" href="#"><span class="doc std std-doc">Jinja templating</span></a>. More on this will be shown when we explore how Python and fugue-sql interact.</p>
-<p>The example above shows the possibility of combining Python and SQL workflows. This is useful if Python needs to connect to other place (AWS S3, Azure Blob Storage, Google Analytics) to retrieve data that is needed for the compute workflow. The data can be loaded in with Python and passed to <code class="docutils literal notranslate"><span class="pre">%%fsql</span></code> cells.</p>
+<p>The example above shows the possibility of combining Python and SQL workflows. This is useful if Python needs to connect somewhere (AWS S3, Azure Blob Storage, Google Analytics etc) to retrieve data that is needed for the compute workflow. The data can be loaded in with Python and passed to <code class="docutils literal notranslate"><span class="pre">%%fsql</span></code> cells.</p>
 </div>
 <div class="section" id="input-and-output">
 <h2>Input and Output<a class="headerlink" href="#input-and-output" title="Permalink to this headline">¶</a></h2>
-<p>Actual data work often require loading in the <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>. <code class="docutils literal notranslate"><span class="pre">Fugue</span></code> has two keywords in <code class="docutils literal notranslate"><span class="pre">SAVE</span></code> and <code class="docutils literal notranslate"><span class="pre">LOAD</span></code>. Using these allow <code class="docutils literal notranslate"><span class="pre">FugueSQL</span></code> users to orchestrate their ETL jobs with SQL logic. A csv file can be loaded in, transformed, and then saved elsewhere. Full data analysis and transformation workflows can be done in <code class="docutils literal notranslate"><span class="pre">FugueSQL</span></code>.</p>
+<p>Actual data work often requires loading in the <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> for which <code class="docutils literal notranslate"><span class="pre">Fugue</span></code> has two keywords <code class="docutils literal notranslate"><span class="pre">SAVE</span></code> and <code class="docutils literal notranslate"><span class="pre">LOAD</span></code>. Using these allow <code class="docutils literal notranslate"><span class="pre">FugueSQL</span></code> users to orchestrate their ETL jobs with SQL logic. A csv file can be loaded in, transformed, and then saved elsewhere. Full data analysis and transformation workflows can be done in <code class="docutils literal notranslate"><span class="pre">FugueSQL</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">fsql</span>
@@ -928,7 +916,7 @@ LOAD &quot;/tmp/f.json&quot; COLUMNS a:int,b:str PRINT
 </table>
 </div></div><div class="output text_html"><small>schema: a:int,b:str</small></div></div>
 </div>
-<p>json, csv, and parquet are support file formats. There are plans to support avro. Notice that parameters can be passed. If running on the default <a class="reference internal" href="../advanced/execution_engine.html"><span class="doc std std-doc">execution engine</span></a>, these would be passed on to <strong>Pandas</strong> <code class="docutils literal notranslate"><span class="pre">read_csv</span></code> and <code class="docutils literal notranslate"><span class="pre">to_csv</span></code>.  The file extension is used as a hint to use the appropriate load/save function. If the extension is not present in the filename, it has to be specified.</p>
+<p>json, csv, parquet and avro are supported file formats. Notice that parameters can be passed. If running on the default <a class="reference internal" href="../advanced/execution_engine.html"><span class="doc std std-doc">execution engine</span></a>, these would be passed on to <strong>Pandas</strong> <code class="docutils literal notranslate"><span class="pre">read_csv</span></code> and <code class="docutils literal notranslate"><span class="pre">to_csv</span></code>.  The file extension is used as a hint to use the appropriate load/save function. If the extension is not present in the filename, it has to be specified.</p>
 </div>
 <div class="section" id="variable-assignment">
 <h2>Variable Assignment<a class="headerlink" href="#variable-assignment" title="Permalink to this headline">¶</a></h2>
@@ -987,7 +975,7 @@ PRINT new
 </div>
 <div class="section" id="execution-engine">
 <h2>Execution Engine<a class="headerlink" href="#execution-engine" title="Permalink to this headline">¶</a></h2>
-<p>So far, we’ve only dealt with the default <a class="reference internal" href="../advanced/execution_engine.html"><span class="doc std std-doc">execution engine</span></a>. If nothing is passed to the <code class="docutils literal notranslate"><span class="pre">%%fsql</span></code>, the <code class="docutils literal notranslate"><span class="pre">NativeExecutionEngine</span></code> is used. Like <code class="docutils literal notranslate"><span class="pre">Fugue</span></code> programming interface, the <code class="docutils literal notranslate"><span class="pre">execution</span> <span class="pre">engine</span></code> can be easily changed by passing it to <code class="docutils literal notranslate"><span class="pre">FugueSQLWorkflow</span></code>. Below is an example for Spark.</p>
+<p>So far, we’ve only dealt with the default <a class="reference internal" href="../advanced/execution_engine.html"><span class="doc std std-doc">execution engine</span></a>. If nothing is passed to <code class="docutils literal notranslate"><span class="pre">%%fsql</span></code>, the <code class="docutils literal notranslate"><span class="pre">NativeExecutionEngine</span></code> is used. Like <code class="docutils literal notranslate"><span class="pre">Fugue</span></code> programming interface, the <code class="docutils literal notranslate"><span class="pre">execution</span> <span class="pre">engine</span></code> can be easily changed by passing it to <code class="docutils literal notranslate"><span class="pre">FugueSQLWorkflow</span></code>. Below is an example for Spark.</p>
 <p>Take note of the output <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> in the example below. It will be a <code class="docutils literal notranslate"><span class="pre">SparkDataFrame</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1303,7 +1291,7 @@ PRINT
     {
         requestKernel: true,
         binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
+            repo: "fugue-project/tutorials",
             ref: "master",
         },
         codeMirrorConfig: {
