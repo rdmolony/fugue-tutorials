@@ -611,20 +611,16 @@ PRINT
 <p>All standard SQL keywords are available in <code class="docutils literal notranslate"><span class="pre">FugueSQL</span></code>. In this example, <code class="docutils literal notranslate"><span class="pre">GROUP</span> <span class="pre">BY</span></code>, <code class="docutils literal notranslate"><span class="pre">WHERE</span></code>, <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>, <code class="docutils literal notranslate"><span class="pre">FROM</span></code> are all the same as standard SQL.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining data</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span><span class="s2">&quot;A&quot;</span><span class="p">,</span><span class="s2">&quot;A&quot;</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">],</span>
-                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-01-02&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;2020-01-03&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span> 
-                             <span class="s2">&quot;2020-01-02&quot;</span><span class="p">,</span> <span class="s2">&quot;2020-01-03&quot;</span><span class="p">],</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">40</span><span class="p">]})</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">fsql</span>
+%%fsql
+data = CREATE [[&quot;A&quot;,&quot;2020-01-01&quot;,10],
+               [&quot;A&quot;,&quot;2020-01-02&quot;,NULL],
+               [&quot;A&quot;,&quot;2020-01-03&quot;,30],
+               [&quot;B&quot;,&quot;2020-01-01&quot;,20],
+               [&quot;B&quot;,&quot;2020-01-02&quot;,NULL],
+               [&quot;B&quot;,&quot;2020-01-03&quot;,40]]
+        SCHEMA id:str, date:str, value: float
+
 SELECT id, date, MIN(value) value
 FROM data
 WHERE value &gt; 20
